@@ -1,14 +1,13 @@
-import { Box, Container, Flex, Heading, useToast } from '@chakra-ui/react'
+import Asientos, { IColums } from '@components/asientos'
+import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
+import Select from '@components/shared/Select/Select'
+import useToggle from '@hooks/useToggle'
+import { useAsientosAbonado } from '@services/useAsientosAbonado'
+import useButacas from '@services/useButacas'
+import { usePreciosRefs } from '@services/usePreciosRefs'
+import { genNombreFilas } from '@utils/genNombreFilas'
 import React, { useEffect, useMemo, useState } from 'react'
-import Asientos, { IColums } from '../../../../components/asientos'
-import ModalConfirmar from '../../../../components/modal/ModalConfirmar'
-import Select from '../../../../components/shared/Select'
-import useToggle from '../../../../hooks/useToggle'
-import { useAsientosAbonado } from '../../../../services/useAsientosAbonado'
-import { useBloqueoAsientoAbono } from '../../../../services/useBloqueoAsientoAbono'
-import useButacas from '../../../../services/useButacas'
-import { usePreciosRefs } from '../../../../services/usePreciosRefs'
-import { genNombreFilas } from '../../../../utils/genNombreFilas'
+import { toast } from 'react-toastify'
 
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
@@ -16,12 +15,12 @@ const Abono = () => {
 	const { tendidos } = usePreciosRefs()
 	const { onOpen, onClose, isOpen } = useToggle()
 	const { asientos, refetch: refetchAsientos } = useAsientosAbonado({ feriaId: 1, tendido: innerValue })
-	const { createBloqueoAsiento } = useBloqueoAsientoAbono()
-	const toast = useToast()
+	// const { createBloqueoAsiento } = useBloqueoAsientoAbono()
+
 	const categorias = tendidos.map((tendido) => ({
 		value: tendido?.tendido!,
-		label: tendido?.tendido!,
-		desc: tendido?.tendido!
+		label: tendido?.tendido!
+		// desc: tendido?.tendido!
 	}))
 	const { db: butacas, loading, refetch } = useButacas({ tendido: innerValue })
 
@@ -43,51 +42,63 @@ const Abono = () => {
 		setSeleccionados([])
 	}, [innerValue])
 
-	const handleBloquear = () => {
-		createBloqueoAsiento({ input: seleccionados }).then((res) => {
-			if (res?.ok) {
-				toast({
-					title: 'Asientos Bloqueados Correctamente',
-					position: 'top-right',
-					isClosable: true,
-					status: 'success'
-				})
-				refetchAsientos()
-				setSeleccionados([])
-			} else {
-				toast({
-					title: res?.error,
-					position: 'top-right',
-					isClosable: true,
-					status: 'error'
-				})
-			}
-		})
+	const handleVenta = () => {
+		// createBloqueoAsiento({ input: seleccionados }).then((res) => {
+		// 	if (res?.ok) {
+		// 		toast.success('Asientos Vendidos Correctamente', {
+		// 			theme: 'colored',
+		// 			position: 'top-right',
+		// 			autoClose: 5000,
+		// 			hideProgressBar: false,
+		// 			closeOnClick: true,
+		// 			pauseOnHover: true,
+		// 			draggable: true,
+		// 			progress: undefined
+		// 		})
+		// 		refetchAsientos()
+		// 		setSeleccionados([])
+		// 	} else {
+		// 		toast.error(res?.error, {
+		// 			theme: 'colored',
+		// 			position: 'top-right',
+		// 			autoClose: 5000,
+		// 			hideProgressBar: false,
+		// 			closeOnClick: true,
+		// 			pauseOnHover: true,
+		// 			draggable: true,
+		// 			progress: undefined
+		// 		})
+		// 	}
+		// })
 	}
 
 	return (
-		<Container maxWidth='1930px' p={'10'}>
-			<Heading as='h1' mb={5} fontSize={22}>
-				Abono
-			</Heading>
-			<Box>
-				<Box pt={5}>
-					<Heading fontSize={20} color='primary.500' textAlign='center' _dark={{ color: 'second.500' }}>
+		<PlantillaPage title='Abono' desc='Desde aqui podras vender los abonos'>
+			<div>
+				<div className='pt-5'>
+					<h2 className='text-xl text-center text-primary-500 dark:text-second-500'>
 						SELECCIONA TUS ASIENTOS
-					</Heading>
-					<Flex
-						flexDir='column'
-						justifyContent='center'
-						borderY='2px'
-						borderColor='primary.500'
-						_dark={{ borderColor: 'second.500' }}
-						py={5}
-						mt={5}>
-						<Select
+					</h2>
+					<div className='flex flex-col justify-center py-5 mt-5 border-y-2 border-primary-500 dark:border-second-500'>
+						{/* <Select
 							innerValue={innerValue!}
 							setInnerValue={setInnerValue}
 							selectOptions={categorias!}
 							label='Tendido'
+						/> */}
+
+						<Select
+							label='Tendido'
+							value={innerValue}
+							options={categorias}
+							onChange={({ value }) => {
+								console.log(value)
+								setInnerValue(value)
+							}}
+							dataExtractor={{
+								label: 'label',
+								value: 'value'
+							}}
 						/>
 
 						{dataAsientos?.length && innerValue?.length > 0 && (
@@ -105,12 +116,12 @@ const Abono = () => {
 								id={innerValue}
 							/>
 						)}
-					</Flex>
-					<Flex p={5} gap={3} fontSize={{ base: 'sm', lg: 'lg' }}>
-						<Flex gap={5} alignItems='center'>
+					</div>
+					<div className='flex p-5 text-sm lg:text-lg'>
+						<div className='flex items-center gap-5'>
 							<span className='w-2.5 h-2.5 bg-butacas rounded-full'></span>
 							<p className='text-tertiary dark:text-yellow-500'>Seleccionados</p>
-						</Flex>
+						</div>
 						<div className='flex items-center gap-2'>
 							<span className='w-2.5 h-2.5 bg-secondary rounded-full'></span>
 							<p className='text-tertiary dark:text-yellow-500'>Libres</p>
@@ -119,8 +130,8 @@ const Abono = () => {
 							<span className='w-2.5 h-2.5 bg-text rounded-full'></span>
 							<p className='text-tertiary dark:text-yellow-500'>No disponibles</p>
 						</div>
-					</Flex>
-				</Box>
+					</div>
+				</div>
 				<div className='flex justify-center w-full bg-secondary'>
 					<div className='py-10 px-5 max-w-[1200px] flex flex-col lg:flex-row justify-between w-full'>
 						<div className='flex flex-col items-center gap-5 lg:flex-row'>
@@ -143,15 +154,15 @@ const Abono = () => {
 						</div>
 					</div>
 				</div>
-			</Box>
-			<ModalConfirmar
+			</div>
+			{/* <ModalConfirmar
 				isOpen={isOpen}
-				onClick={handleBloquear}
+				onClick={handleVenta}
 				onClose={onClose}
 				header='Bloaquer'
 				body='¿Estas seguro que deseas Bloaquer esta asiento?'
-			/>
-		</Container>
+			/> */}
+		</PlantillaPage>
 	)
 }
 

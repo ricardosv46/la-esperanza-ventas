@@ -4,6 +4,7 @@ import { lazy } from 'react'
 
 const VentasPage = lazy(() => import('../pages/home/ventas/VentasPage'))
 const VentasAsientos = lazy(() => import('../pages/home/ventas/ventasAsientos/VentasAsientos'))
+const AbonoPage = lazy(() => import('../pages/home/ventas/ventasAsientos/abono/AbonoPage'))
 
 export const homeRoutes: Route[] = [
 	{
@@ -19,18 +20,18 @@ export const homeRoutes: Route[] = [
 					icon: IconHome,
 					name: 'Asientos',
 					path: 'ventas/asientos',
-					to: 'asientos',
+					to: '',
 					component: VentasAsientos,
 					render: false
+				},
+				{
+					icon: IconHome,
+					name: 'Abono',
+					path: 'ventas/asientos/abono',
+					to: '',
+					component: AbonoPage,
+					render: false
 				}
-				// {
-				// 	icon: IconHome,
-				// 	name: 'Abono',
-				// 	path: 'bloqueo/abono',
-				// 	to: 'abono',
-				// 	component: AbonoPage,
-				// 	render: false
-				// },
 
 				// {
 				// 	icon: IconHome,

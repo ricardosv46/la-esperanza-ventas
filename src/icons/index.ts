@@ -16,23 +16,27 @@ import IconChevronsLeft from './IconChevronsLeft'
 import IconChevronsRight from './IconChevronsRight'
 import IconChevronRight from './IconChevronRight'
 import IconChevronUp from './IconChevronUp'
+import IconSearchMinus from './IconSearchMinus'
+import IconSearchPlus from './IconSearchPlus'
 export {
-  IconLogo,
-  IconBars,
-  IconClose,
-  IconLogout,
-  IconHome,
-  IconChevronLeft,
-  IconEye,
-  IconEyeSlash,
-  IconCheckbox,
-  IconMoon,
-  IconSun,
-  IconPlus,
-  IconMinus,
-  IconChevronDown,
-  IconChevronsLeft,
-  IconChevronsRight,
-  IconChevronRight,
-  IconChevronUp
+	IconLogo,
+	IconBars,
+	IconClose,
+	IconLogout,
+	IconHome,
+	IconChevronLeft,
+	IconEye,
+	IconEyeSlash,
+	IconCheckbox,
+	IconMoon,
+	IconSun,
+	IconPlus,
+	IconMinus,
+	IconChevronDown,
+	IconChevronsLeft,
+	IconChevronsRight,
+	IconChevronRight,
+	IconChevronUp,
+	IconSearchPlus,
+	IconSearchMinus
 }
