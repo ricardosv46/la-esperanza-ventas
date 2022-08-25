@@ -19,7 +19,7 @@ const VentasAsientos = () => {
 	return (
 		<PlantillaPage title='Butacas' desc='Desde aqui podras visualizar la informacion de todas los butacas'>
 			<h2 className='text-2xl font-bold text-left text-slate-800 dark:text-slate-200 '>Abono</h2>
-			<Show condition={loadingFeria} isDefault={<Spinner className='w-10 h-10 mx-auto my-10 border-4' />}>
+			<Show condition={loadingFeria} loading isDefault={<Spinner className='w-10 h-10 mx-auto my-10 border-4' />}>
 				<div className='flex flex-col items-center gap-10 mt-10 font-bold text-center text-gray-700 sm:flex-row'>
 					<button
 						className={classNames([isDisableAbono ? 'grayscale' : '', 'w-64'])}
@@ -44,7 +44,10 @@ const VentasAsientos = () => {
 			</Show>
 			<h2 className='mt-10 text-2xl font-bold text-left text-slate-800 dark:text-slate-200'>Eventos</h2>
 
-			<Show condition={loadingEventos} isDefault={<Spinner className='w-10 h-10 mx-auto my-10 border-4' />}>
+			<Show
+				condition={loadingEventos}
+				loading
+				isDefault={<Spinner className='w-10 h-10 mx-auto my-10 border-4' />}>
 				<div className='flex flex-col flex-wrap items-center gap-10 mt-10 font-bold text-center text-gray-700 sm:flex-row '>
 					{eventos.map((evento) => {
 						const fechaInicialEvento = `${evento?.fechaInicial} ${evento?.horaInicial}`

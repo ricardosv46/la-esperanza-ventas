@@ -1,29 +1,45 @@
 import Asientos, { IColums } from '@components/asientos'
 
 import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
+import Input from '@components/shared/Input/Input'
 import Modal from '@components/shared/Modal'
 import ModalConfirmar from '@components/shared/Modal/ModalConfirmar'
 import Select from '@components/shared/Select/Select'
+import { Show } from '@components/shared/Show/Show'
 import useToggle from '@hooks/useToggle'
 import { useAsientosAbonado } from '@services/useAsientosAbonado'
 import useButacas from '@services/useButacas'
 import { usePreciosRefs } from '@services/usePreciosRefs'
 import { classNames } from '@utils/classNames'
 import { genNombreFilas } from '@utils/genNombreFilas'
+import { useFormik } from 'formik'
 import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
-
+import { validateVenta } from '@validation/validateVenta'
+import { IconChevronLeft } from '@icons'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
 	const { tendidos } = usePreciosRefs()
 	const { onOpen, onClose, isOpen } = useToggle()
+	const { onOpen: onOpenForm, onClose: onCloseForm, isOpen: isOpenForm } = useToggle()
+
 	const { asientos, refetch: refetchAsientos } = useAsientosAbonado({ feriaId: 1, tendido: innerValue })
 	// const { createBloqueoAsiento } = useBloqueoAsientoAbono()
 
+	const dataDocumento = [
+		{ value: 'Boleta', label: 'Boleta' },
+		{ value: 'Factura', label: 'Factura' }
+	]
+
+	const dataTipoVenta = [
+		{ value: 'Efectivo', label: 'Efectivo' },
+		{ value: 'Tarjeta', label: 'Tarjeta' }
+	]
+
 	const categorias = tendidos.map((tendido) => ({
 		value: tendido?.tendido!,
-		label: tendido?.tendido!
+		label: tendido?.titulo!
 		// desc: tendido?.tendido!
 	}))
 	const { db: butacas, loading, refetch } = useButacas({ tendido: innerValue })
@@ -45,6 +61,10 @@ const Abono = () => {
 		refetchAsientos()
 		setSeleccionados([])
 	}, [innerValue])
+
+	const onSubmit = () => {
+		console.log('elmo', values)
+	}
 
 	const handleVenta = () => {
 		// createBloqueoAsiento({ input: seleccionados }).then((res) => {
@@ -76,62 +96,77 @@ const Abono = () => {
 		// })
 	}
 
+	const { values, errors, touched, ...form } = useFormik({
+		validate: validateVenta,
+		onSubmit,
+		initialValues: {
+			tipoComprobante: '',
+			email: '',
+			numeroComprobante: '',
+			celular: '',
+			razonSocial: '',
+			nombres: '',
+			apellidos: '',
+			tipoVenta: ''
+		}
+	})
+
+	const total = seleccionados.reduce((prev, curr) => prev + curr.precio, 0)
+
 	return (
 		<>
-			<PlantillaPage title='Abono' desc='Desde aqui podras vender los abonos'>
-				<div>
-					<div className='pt-5'>
-						<h2 className='text-xl text-center text-primary-500 dark:text-second-500'>
-							SELECCIONA TUS ASIENTOS
-						</h2>
-						<div className='flex flex-col justify-center py-5 mt-5 border-y-2 border-primary-500 dark:border-second-500'>
-							<Select
-								label='Tendido'
-								value={innerValue}
-								options={categorias}
-								onChange={({ value }) => {
-									console.log(value)
-									setInnerValue(value)
-								}}
-								dataExtractor={{
-									label: 'label',
-									value: 'value'
-								}}
-							/>
+			<PlantillaPage title='Abono' desc='Desde aqui podras vender los abonos' goback={onCloseForm}>
+				<Show condition={!isOpenForm} className='pt-5'>
+					<h2 className='text-xl text-center text-primary-500 dark:text-second-500'>
+						SELECCIONA TUS ASIENTOS
+					</h2>
 
-							{dataAsientos?.length && innerValue?.length > 0 && (
-								<Asientos
-									{...{
-										data: dataAsientos!,
-										desabilitados: asientos,
-										seleccionados,
-										setSeleccionados,
-										nombreFilas: genNombreFilas(innerValue)
-									}}
-									tipo='abono'
-									doble={
-										innerValue === 'T2S' ? 'Tendido2' : innerValue === 'T3' ? 'Tendido3' : 'Ruedo'
-									}
-									direccion={innerValue === 'T3A' ? 'end' : innerValue === 'T3B' ? 'start' : 'center'}
-									id={innerValue}
-								/>
-							)}
+					<div className='flex flex-col justify-center py-5 mt-5 border-y-2 border-primary-500 dark:border-second-500'>
+						<Select
+							label='Tendido'
+							value={innerValue}
+							options={categorias}
+							onChange={({ value }) => {
+								console.log(value)
+								setInnerValue(value)
+							}}
+							dataExtractor={{
+								label: 'label',
+								value: 'value'
+							}}
+						/>
+
+						{dataAsientos?.length && innerValue?.length > 0 && (
+							<Asientos
+								{...{
+									data: dataAsientos!,
+									desabilitados: asientos,
+									seleccionados,
+									setSeleccionados,
+									nombreFilas: genNombreFilas(innerValue)
+								}}
+								tipo='abono'
+								doble={innerValue === 'T2S' ? 'Tendido2' : innerValue === 'T3' ? 'Tendido3' : 'Ruedo'}
+								direccion={innerValue === 'T3A' ? 'end' : innerValue === 'T3B' ? 'start' : 'center'}
+								id={innerValue}
+							/>
+						)}
+					</div>
+					<div className='flex gap-5 p-5 text-sm lg:text-lg'>
+						<div className='flex items-center gap-2'>
+							<span className='w-2.5 h-2.5 bg-primary-900 rounded-full'></span>
+							<p className='text-tertiary dark:text-yellow-500'>Seleccionados</p>
 						</div>
-						<div className='flex gap-5 p-5 text-sm lg:text-lg'>
-							<div className='flex items-center gap-2'>
-								<span className='w-2.5 h-2.5 bg-primary-900 rounded-full'></span>
-								<p className='text-tertiary dark:text-yellow-500'>Seleccionados</p>
-							</div>
-							<div className='flex items-center gap-2'>
-								<span className='w-2.5 h-2.5 bg-second-500 rounded-full'></span>
-								<p className='text-tertiary dark:text-yellow-500'>Libres</p>
-							</div>
-							<div className='flex items-center gap-2'>
-								<span className='w-2.5 h-2.5 bg-gray-500 rounded-full'></span>
-								<p className='text-tertiary dark:text-yellow-500'>No disponibles</p>
-							</div>
+						<div className='flex items-center gap-2'>
+							<span className='w-2.5 h-2.5 bg-second-500 rounded-full'></span>
+							<p className='text-tertiary dark:text-yellow-500'>Libres</p>
+						</div>
+						<div className='flex items-center gap-2'>
+							<span className='w-2.5 h-2.5 bg-gray-500 rounded-full'></span>
+							<p className='text-tertiary dark:text-yellow-500'>No disponibles</p>
 						</div>
 					</div>
+
 					<div className='flex justify-center w-full bg-second-500'>
 						<div className='py-10 px-5 max-w-[1200px] flex flex-col lg:flex-row justify-between w-full'>
 							<div className='flex flex-col items-center gap-5 lg:flex-row'>
@@ -151,21 +186,158 @@ const Abono = () => {
 										'px-5 py-2 mt-10 text-white rounded-lg bg-primary-600 lg:mt-0',
 										seleccionados.length === 0 ? 'opacity-50' : ''
 									])}
-									onClick={onOpen}>
+									onClick={onOpenForm}>
 									Vender
 								</button>
 							</div>
 						</div>
 					</div>
-				</div>
+				</Show>
+				<Show condition={isOpenForm}>
+					<div className='flex items-center justify-center gap-10 mt-10 '>
+						<form
+							onSubmit={form.handleSubmit}
+							className='grid w-full max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2'>
+							<Select
+								label='Tipo Comprobante'
+								value={values.tipoComprobante}
+								options={dataDocumento}
+								onChange={({ value }) => {
+									form.setFieldValue('tipoComprobante', value)
+								}}
+								dataExtractor={{
+									label: 'label',
+									value: 'value'
+								}}
+								error={errors.tipoComprobante}
+								touched={touched?.tipoComprobante ?? false}
+							/>
+							<Input
+								type='text'
+								label={values.tipoComprobante === 'Factura' ? 'RUC' : 'Documento'}
+								{...form.getFieldProps('numeroComprobante')}
+								error={errors.numeroComprobante}
+								touched={touched?.numeroComprobante ?? false}
+							/>
+							{values.tipoComprobante === 'Factura' && (
+								<Input
+									type='text'
+									label='Razón Social'
+									{...form.getFieldProps('razonSocial')}
+									error={errors.razonSocial}
+									touched={touched?.razonSocial ?? false}
+								/>
+							)}
+							{values.tipoComprobante === 'Boleta' && (
+								<Input
+									type='text'
+									label='Nombres'
+									{...form.getFieldProps('nombres')}
+									error={errors.nombres}
+									touched={touched?.nombres ?? false}
+								/>
+							)}
+
+							{values.tipoComprobante === 'Boleta' && (
+								<Input
+									type='text'
+									label='Apellidos'
+									{...form.getFieldProps('apellidos')}
+									error={errors.apellidos}
+									touched={touched?.apellidos ?? false}
+								/>
+							)}
+							<Select
+								label='Tipo Pago'
+								value={values.tipoVenta}
+								options={dataTipoVenta}
+								onChange={({ value }) => {
+									form.setFieldValue('tipoVenta', value)
+								}}
+								dataExtractor={{
+									label: 'label',
+									value: 'value'
+								}}
+								error={errors.tipoVenta}
+								touched={touched?.tipoVenta ?? false}
+							/>
+							<Input
+								type='text'
+								label='Celular'
+								{...form.getFieldProps('celular')}
+								error={errors.celular}
+								touched={touched?.celular ?? false}
+							/>
+							<Input
+								className={values.tipoComprobante === 'Boleta' ? 'col-span-2' : ''}
+								type='text'
+								label='Correo'
+								{...form.getFieldProps('email')}
+								error={errors.email}
+								touched={touched?.email ?? false}
+							/>
+
+							<div className='flex items-center justify-center col-span-2'>
+								<button
+									type='submit'
+									// disabled={loadingLogin}
+									className='w-1/3 btn btn-solid-primary'>
+									Crear Venta
+									{/* {loadingLogin && <Spinner />} */}
+								</button>
+							</div>
+						</form>
+						<div className='p-5 text-white rounded-lg bg-primary-100'>
+							<div className='flex justify-between'>
+								<p className='w-[300px] text-xl font-bold'>Nro de entradas</p>
+								<p className='text-xl font-bold'>{seleccionados.length}</p>
+							</div>
+							{seleccionados.map((item) => {
+								const desabilitado = asientos.some(
+									(desabilitado) => desabilitado?.reservado === item?.reservado
+								)
+
+								const newtiems = seleccionados.filter(
+									(seleccionado) => seleccionado.reservado !== item.reservado
+								)
+
+								const removeItem = () => {
+									setSeleccionados(newtiems)
+								}
+
+								return (
+									<div key={item.reservado} className='relative'>
+										<div className='flex justify-between w-full '>
+											<p className='mt-2 text-xs leading-none '>1 x ABONO – {item.reservado}</p>
+											<p className='font-bold leading-none text-md'>S/{item.precio.toFixed(2)}</p>
+										</div>
+										<div className='flex justify-between w-full leading-none'>
+											<p className='text-xs leading-none text-red-500 left-5'>
+												{desabilitado ? 'No disponible por favor vuleva a seleccionar' : ''}
+											</p>
+										</div>
+
+										<button className='absolute text-red-500 -top-1 -right-4' onClick={removeItem}>
+											X
+										</button>
+									</div>
+								)
+							})}
+							<div className='flex items-center justify-between mt-10 text-2xl font-bold'>
+								<p className='w-[200px] '>Total</p>
+								<p>S/{total.toFixed(2)}</p>
+							</div>
+						</div>
+					</div>
+				</Show>
 			</PlantillaPage>
-			<ModalConfirmar
+			{/* <ModalConfirmar
 				isOpen={isOpen}
 				onClick={handleVenta}
 				onClose={onClose}
 				header='Vender'
 				body='¿Estas seguro que deseas vender este asiento?'
-			/>
+			/> */}
 		</>
 	)
 }

@@ -12,8 +12,8 @@ const dataTHead = [
 	'Documento',
 	'Celular',
 	'Email',
-	'Tipo Pago',
 	'Fecha Venta',
+	'Tipo Pago',
 	'Nombres o Razón social'
 ]
 
@@ -38,7 +38,7 @@ const VentasPage = () => {
 					Crear Venta
 				</button>
 			}>
-			<Show condition={loading} isDefault={<Spinner className='w-10 h-10 mx-auto my-20 border-4' />}>
+			<Show condition={loading} loading isDefault={<Spinner className='w-10 h-10 mx-auto my-20 border-4' />}>
 				<Table
 					th={dataTHead}
 					data={ventas}

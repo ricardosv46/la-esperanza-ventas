@@ -19,6 +19,7 @@ interface Filas {
 	butacaId: string
 	codigo: string
 	cantidad: number
+	precio: number
 }
 
 export interface IColums {
@@ -27,6 +28,7 @@ export interface IColums {
 	codigo: string
 	tendido: string
 	feriaId: number
+	precio: number
 	eventoId?: number
 }
 
@@ -46,7 +48,7 @@ const Asientos = ({
 		let tfilas: any = {}
 		for (let i = 0; i < data?.length; i++) {
 			const fila = data[i].codigo
-
+			const precio = data[i].precio
 			const tendido = data[i].tendido
 
 			tfilas[data[i].codigo] = new Array(data[i].cantidad).fill(null).map((_, i) => ({
@@ -55,6 +57,7 @@ const Asientos = ({
 				tendido: tendido,
 				codigo: fila,
 				asiento: i + 1,
+				precio: precio,
 				feriaId: 1,
 				eventoId: evento ? Number(evento) : 0
 			}))
@@ -105,7 +108,10 @@ const Asientos = ({
 									: 'w-[750px]'
 							} px-5 `}>
 							{filas[`${fila.toString()}`].map(
-								({ reservado, asiento, codigo, feriaId, tendido, eventoId }: IColums, index: any) => {
+								(
+									{ reservado, precio, asiento, codigo, feriaId, tendido, eventoId }: IColums,
+									index: any
+								) => {
 									if (index < asiento) {
 										const isActive = seleccionados.some(
 											(seleccionado) => seleccionado.reservado === reservado
@@ -120,7 +126,7 @@ const Asientos = ({
 													if (tipo === 'abono') {
 														selectId({
 															reservado,
-
+															precio,
 															asiento: asiento.toString(),
 															codigo,
 															feriaId,
@@ -130,7 +136,7 @@ const Asientos = ({
 													if (tipo === 'evento') {
 														selectId({
 															reservado,
-
+															precio,
 															asiento: asiento.toString(),
 															codigo,
 															feriaId,

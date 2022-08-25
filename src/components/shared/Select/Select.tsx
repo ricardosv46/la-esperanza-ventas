@@ -21,6 +21,7 @@ interface Props<T> {
 	options?: T[]
 	label?: string
 	error?: string
+	touched?: boolean
 	withFilter?: boolean
 	value?: string | number
 	dataExtractor?: { value: keyof T; label: keyof T }
@@ -93,10 +94,12 @@ const Select = <T extends object>({
 		<div className='w-full'>
 			<div className='relative w-full'>
 				<Input
+					disabled={!withFilter}
 					ref={inputRef}
 					label={label}
 					value={innerValue}
 					error={props.error}
+					touched={props.touched}
 					onBlur={onBlur}
 					onChange={handleChange}
 					rightElement={

@@ -10,10 +10,11 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	rightElement?: ReactElement
 	icon?: (props: SVGProps<SVGSVGElement>) => ReactElement
 	touched?: boolean
+	className?: string
 }
 
 const Input = (
-	{ label, icon: Icon, rightElement, touched, ...props }: Props,
+	{ label, icon: Icon, rightElement, touched, className, ...props }: Props,
 	ref: ForwardedRef<HTMLInputElement> | null
 ) => {
 	const uid = useId()
@@ -23,7 +24,7 @@ const Input = (
 	const isValueEmpty = isEmpty(typeof props?.value === 'string' ? props.value : '')
 
 	return (
-		<div>
+		<div className={className}>
 			<div className='relative bg-slate-300 bg-opacity-50 dark:bg-slate-800  h-[60px] rounded-tr-md rounded-tl-md shadow w-full'>
 				<input
 					ref={ref}
