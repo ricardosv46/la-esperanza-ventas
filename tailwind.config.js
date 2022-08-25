@@ -7,7 +7,9 @@ module.exports = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      colors: { ...themes },
+      colors: {
+        ...themes,
+      },
       animation: {
         move: 'move 1s ease-in-out',
       },

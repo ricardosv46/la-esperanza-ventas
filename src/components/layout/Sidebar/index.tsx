@@ -18,7 +18,7 @@ const Sidebar = ({ onClose, mobile = false }: Props) => {
 
 	return (
 		<div
-			className={`relative h-full ease-out transition-all duration-300 overflow-hidden hover:w-[300px] hover:opacity-100 ${
+			className={`relative h-full ease-out transition-all duration-300 overflow-hidden hover:w-[300px]  hover:opacity-100 ${
 				mobile ? '' : styles.sidebar
 			} ${mobile ? '' : isOpen ? styles.anchor : ''} ${
 				mobile ? 'w-[300px]' : isOpen ? 'w-[300px]' : 'w-[72px]'

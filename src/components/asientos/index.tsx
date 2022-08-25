@@ -72,15 +72,15 @@ const Asientos = ({
 		}
 	}
 
-	// useEffect(() => {
-	// 	const newids = seleccionados.filter((seleccionado) => {
-	// 		const desabilitado = desabilitados.some(
-	// 			(desabilitado) => desabilitado?.reservado === seleccionado?.reservado
-	// 		)
-	// 		return !desabilitado
-	// 	})
-	// 	setSeleccionados(newids)
-	// }, [desabilitados])
+	useEffect(() => {
+		const newids = seleccionados.filter((seleccionado) => {
+			const desabilitado = desabilitados.some(
+				(desabilitado) => desabilitado?.reservado === seleccionado?.reservado
+			)
+			return !desabilitado
+		})
+		setSeleccionados(newids)
+	}, [desabilitados])
 
 	return (
 		<Zoom id={id}>
@@ -143,10 +143,10 @@ const Asientos = ({
 												className={`
                                   ${
 										disabled
-											? 'bg-text text-white'
+											? 'bg-gray-500 text-white'
 											: isActive
-											? 'bg-butacas text-white'
-											: 'bg-yellow-500  text-primary'
+											? 'bg-primary-900 text-white'
+											: 'bg-yellow-500  text-primary-500'
 									}
                                    rounded-full  h-4 w-4  font-semibold  flex justify-center items-center `}>
 												<p className='text-[7px] leading-0'>{asiento}</p>
@@ -199,7 +199,7 @@ const Asientos = ({
 							<svg viewBox='0 0 500 150' preserveAspectRatio='none' className='w-full h-full '>
 								<path
 									d='M0.00,49.98 C-71.95,55.77 250.27,-17.25 500.00,49.98 L500.00,120.00 L-0.27,117.94 Z'
-									className='fill-text'></path>
+									className='fill-gray-500'></path>
 							</svg>
 							<div className='absolute top-0 flex items-center justify-center w-full h-full text-white '>
 								RUEDO
@@ -213,14 +213,3 @@ const Asientos = ({
 }
 
 export default Asientos
-
-{
-	/* <div className='flex justify-end w-full gap-3 pt-2'>
-					<button onClick={() => {}}>
-						<IconSearchPlus fill='#4C000C' width={20} height={20}></IconSearchPlus>
-					</button>
-					<button onClick={() => {}}>
-						<IconSearchMinus fill='#4C000C' width={20} height={20}></IconSearchMinus>
-					</button>
-				</div> */
-}
