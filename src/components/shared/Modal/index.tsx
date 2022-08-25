@@ -24,7 +24,6 @@ const Modal = ({ children, isOpen, className, hasOverlay, sidebar, onClose }: Pr
 			{sidebar ? (
 				<motion.div
 					variants={fade}
-					onClick={onClose}
 					animate={isOpen ? 'open' : 'closed'}
 					initial={{ opacity: 0, pointerEvents: 'none' }}
 					className='fixed top-0 z-50 flex w-full h-screen '>
@@ -34,7 +33,6 @@ const Modal = ({ children, isOpen, className, hasOverlay, sidebar, onClose }: Pr
 			) : (
 				<motion.div
 					variants={fade}
-					onClick={onClose}
 					animate={isOpen ? 'open' : 'closed'}
 					initial={{ opacity: 0, pointerEvents: 'none' }}
 					className='fixed top-0 z-50 grid w-full h-screen place-items-center'>

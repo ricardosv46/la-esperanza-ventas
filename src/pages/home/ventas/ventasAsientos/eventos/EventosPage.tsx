@@ -1,5 +1,6 @@
 import Asientos, { IColums } from '@components/asientos'
 import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
+import ModalConfirmar from '@components/shared/Modal/ModalConfirmar'
 import Select from '@components/shared/Select/Select'
 import useToggle from '@hooks/useToggle'
 import { useAsientosAbonado } from '@services/useAsientosAbonado'
@@ -80,89 +81,93 @@ const Abono = () => {
 	}
 
 	return (
-		<PlantillaPage title='Abono' desc='Desde aqui podras vender los abonos'>
-			<div>
-				<div className='pt-5'>
-					<h2 className='text-xl text-center text-primary-500 dark:text-second-500'>
-						SELECCIONA TUS ASIENTOS
-					</h2>
-					<div className='flex flex-col justify-center py-5 mt-5 border-y-2 border-primary-500 dark:border-second-500'>
-						<Select
-							label='Tendido'
-							value={innerValue}
-							options={categorias}
-							onChange={({ value }) => {
-								console.log(value)
-								setInnerValue(value)
-							}}
-							dataExtractor={{
-								label: 'label',
-								value: 'value'
-							}}
-						/>
-
-						{dataAsientos?.length && innerValue?.length > 0 && (
-							<Asientos
-								{...{
-									data: dataAsientos!,
-									desabilitados: asientos,
-									seleccionados,
-									setSeleccionados,
-									nombreFilas: genNombreFilas(innerValue)
+		<>
+			<PlantillaPage title='Eventos' desc='Desde aqui podras vender los eventos'>
+				<div>
+					<div className='pt-5'>
+						<h2 className='text-xl text-center text-primary-500 dark:text-second-500'>
+							SELECCIONA TUS ASIENTOS
+						</h2>
+						<div className='flex flex-col justify-center py-5 mt-5 border-y-2 border-primary-500 dark:border-second-500'>
+							<Select
+								label='Tendido'
+								value={innerValue}
+								options={categorias}
+								onChange={({ value }) => {
+									console.log(value)
+									setInnerValue(value)
 								}}
-								tipo='abono'
-								doble={innerValue === 'T2S' ? 'Tendido2' : innerValue === 'T3' ? 'Tendido3' : 'Ruedo'}
-								direccion={innerValue === 'T3A' ? 'end' : innerValue === 'T3B' ? 'start' : 'center'}
-								id={innerValue}
+								dataExtractor={{
+									label: 'label',
+									value: 'value'
+								}}
 							/>
-						)}
-					</div>
-					<div className='flex gap-5 p-5 text-sm lg:text-lg'>
-						<div className='flex items-center gap-2'>
-							<span className='w-2.5 h-2.5 bg-primary-900 rounded-full'></span>
-							<p className='text-tertiary dark:text-yellow-500'>Seleccionados</p>
+
+							{dataAsientos?.length && innerValue?.length > 0 && (
+								<Asientos
+									{...{
+										data: dataAsientos!,
+										desabilitados: asientos,
+										seleccionados,
+										setSeleccionados,
+										nombreFilas: genNombreFilas(innerValue)
+									}}
+									tipo='abono'
+									doble={
+										innerValue === 'T2S' ? 'Tendido2' : innerValue === 'T3' ? 'Tendido3' : 'Ruedo'
+									}
+									direccion={innerValue === 'T3A' ? 'end' : innerValue === 'T3B' ? 'start' : 'center'}
+									id={innerValue}
+								/>
+							)}
 						</div>
-						<div className='flex items-center gap-2'>
-							<span className='w-2.5 h-2.5 bg-second-500 rounded-full'></span>
-							<p className='text-tertiary dark:text-yellow-500'>Libres</p>
-						</div>
-						<div className='flex items-center gap-2'>
-							<span className='w-2.5 h-2.5 bg-gray-500 rounded-full'></span>
-							<p className='text-tertiary dark:text-yellow-500'>No disponibles</p>
-						</div>
-					</div>
-				</div>
-				<div className='flex justify-center w-full bg-second-500'>
-					<div className='py-10 px-5 max-w-[1200px] flex flex-col lg:flex-row justify-between w-full'>
-						<div className='flex flex-col items-center gap-5 lg:flex-row'>
-							<p className='font-bold text-primary'>Seleccionados:</p>
-							<div className='flex flex-wrap gap-2 leading-none lg:grid lg:grid-cols-10'>
-								{seleccionados.map((item) => (
-									<p key={item.reservado} className='text-xs font-bold text-primary'>
-										{item.reservado}
-									</p>
-								))}
+						<div className='flex gap-5 p-5 text-sm lg:text-lg'>
+							<div className='flex items-center gap-2'>
+								<span className='w-2.5 h-2.5 bg-primary-900 rounded-full'></span>
+								<p className='text-tertiary dark:text-yellow-500'>Seleccionados</p>
+							</div>
+							<div className='flex items-center gap-2'>
+								<span className='w-2.5 h-2.5 bg-second-500 rounded-full'></span>
+								<p className='text-tertiary dark:text-yellow-500'>Libres</p>
+							</div>
+							<div className='flex items-center gap-2'>
+								<span className='w-2.5 h-2.5 bg-gray-500 rounded-full'></span>
+								<p className='text-tertiary dark:text-yellow-500'>No disponibles</p>
 							</div>
 						</div>
-						<div className='flex items-end'>
-							<button
-								disabled={seleccionados.length === 0}
-								className='px-5 py-2 mt-10 text-white rounded-lg bg-primary-600 lg:mt-0'
-								onClick={onOpen}>
-								Vender
-							</button>
+					</div>
+					<div className='flex justify-center w-full bg-second-500'>
+						<div className='py-10 px-5 max-w-[1200px] flex flex-col lg:flex-row justify-between w-full'>
+							<div className='flex flex-col items-center gap-5 lg:flex-row'>
+								<p className='font-bold text-primary'>Seleccionados:</p>
+								<div className='flex flex-wrap gap-2 leading-none lg:grid lg:grid-cols-10'>
+									{seleccionados.map((item) => (
+										<p key={item.reservado} className='text-xs font-bold text-primary'>
+											{item.reservado}
+										</p>
+									))}
+								</div>
+							</div>
+							<div className='flex items-end'>
+								<button
+									disabled={seleccionados.length === 0}
+									className='px-5 py-2 mt-10 text-white rounded-lg bg-primary-600 lg:mt-0'
+									onClick={onOpen}>
+									Vender
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			{/* <ModalConfirmar
+			</PlantillaPage>
+			<ModalConfirmar
 				isOpen={isOpen}
 				onClick={handleVenta}
 				onClose={onClose}
-				header='Bloaquer'
-				body='¿Estas seguro que deseas Bloaquer esta asiento?'
-			/> */}
-		</PlantillaPage>
+				header='Vender'
+				body='¿Estas seguro que deseas vender este asiento?'
+			/>
+		</>
 	)
 }
 

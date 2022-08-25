@@ -2,6 +2,7 @@ import Asientos, { IColums } from '@components/asientos'
 
 import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
 import Modal from '@components/shared/Modal'
+import ModalConfirmar from '@components/shared/Modal/ModalConfirmar'
 import Select from '@components/shared/Select/Select'
 import useToggle from '@hooks/useToggle'
 import { useAsientosAbonado } from '@services/useAsientosAbonado'
@@ -158,35 +159,13 @@ const Abono = () => {
 					</div>
 				</div>
 			</PlantillaPage>
-			{/* <ModalConfirmar
+			<ModalConfirmar
 				isOpen={isOpen}
 				onClick={handleVenta}
 				onClose={onClose}
-				header='Bloaquer'
-				body='¿Estas seguro que deseas Bloaquer esta asiento?'
-			/> */}
-			<Modal isOpen={isOpen} onClose={onClose} hasOverlay>
-				<div className='p-8 bg-white rounded-lg '>
-					<h2 className='text-lg font-bold'>Vender</h2>
-
-					<p className='mt-2 text-gray-500'>¿Estas seguro que deseas vender este asiento?</p>
-
-					<div className='flex items-center justify-end gap-3 mt-8 '>
-						<button
-							type='button'
-							onClick={onClose}
-							className='px-4 py-2 text-lg font-semibold text-gray-600 bg-gray-100 rounded-lg'>
-							Cancelar
-						</button>
-						<button
-							type='button'
-							onClick={onClose}
-							className='px-4 py-2 text-lg font-semibold text-white bg-green-600 rounded-lg'>
-							Confirmar
-						</button>
-					</div>
-				</div>
-			</Modal>
+				header='Vender'
+				body='¿Estas seguro que deseas vender este asiento?'
+			/>
 		</>
 	)
 }
