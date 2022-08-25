@@ -1,0 +1,35 @@
+
+=== USER = ADMIN
+[x] Tabla de Especie (ADMIN) + CRUD
+[x] Tabla de Cultivos (ADMIN) + CRUD
+[x] Tabla de jefes de area + CRUD (ADMIN) + CRUD
+
+=== USER = JEFE AREA
+[] Tabla de especialistas + CRUD (JEFE AREA)
+[] Tabla de todos los expedientes (JEFE AREA) asignar expedientes a especialistas
+
+=== USER = ESPE
+[] Tabla expedientes asignados al especialista (ESPE) -> 1
+
+=== ALL
+[] Cambiar contraseña
+
+=== 14/07
+¨[x] Usuario falta nombre apellido y correo
+[x] Usuario no tendras DPD si no sedes
+[x] Crear tabla de sedes -> SEDE_ID, DEPARTAMENTO_ID, PROVINCIA_ID, DISTRITO_ID, DIRECCION
+
+LIMA - CAÑETE - BREÑA -> SEDE LIMA
+CUZCO - CUZCO - ADS -> SEDE VRAEM
+CUZCO - CUZCO - asfq -> SEDE CUZCO
+APURIMAC - APURIMAC - asd -> SEDE VRAEM
+
+vraem = ['150512']
+
+[x] Paginado
+[x] Filtro ROL - ESTADO
+[x] Quitar rol de JEFEAREA
+[x] Ver Expedientes pero no puede editar -> ADMIN
+[x] Agregar vista especialita sin editar filtro SEDE -> ADMIN
+[x] Agregar vista especialita con editar de su SEDE -> JEFE AREA
+[] Ver expedientes de su zona y si los puede asignar -> JEFE AREA
