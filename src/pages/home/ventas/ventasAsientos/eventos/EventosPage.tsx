@@ -21,6 +21,7 @@ import useVendedoras from '@services/useVentas'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsientosEventos } from '@services/useAsientosEventos'
 import Spinner from '@components/shared/Spinner/Spinner'
+import moment from 'moment'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
@@ -30,7 +31,7 @@ const Abono = () => {
 	const router = useNavigate()
 	const { state: eventos } = useLocation() as any
 	const evento = eventos.evento
-
+	const fecha = moment().format('YYYY-MM-DD')
 	const { asientos, refetch: refetchAsientos } = useAsientosEventos({
 		eventoId: evento?.eventoId,
 		tendido: innerValue
@@ -82,7 +83,7 @@ const Abono = () => {
 				tipoComprobante: values.tipoComprobante,
 				numeroComprobante: values.numeroComprobante,
 				precioTotal: total,
-				fechaVenta: '2022-07-19',
+				fechaVenta: fecha,
 				razonSocial:
 					values.tipoComprobante === 'Factura' ? values.razonSocial : values.nombres + '' + values.apellidos,
 				tipoVenta: values.tipoVenta,

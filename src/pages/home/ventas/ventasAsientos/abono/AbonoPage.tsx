@@ -20,6 +20,7 @@ import { IconChevronLeft } from '@icons'
 import useVendedoras from '@services/useVentas'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '@components/shared/Spinner/Spinner'
+import moment from 'moment'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
@@ -29,7 +30,8 @@ const Abono = () => {
 	const router = useNavigate()
 	const { asientos, refetch: refetchAsientos } = useAsientosAbonado({ feriaId: 1, tendido: innerValue })
 	const { createVentaAbonado, loadingVentaAbonado } = useVendedoras()
-
+	const fecha = moment().format('YYYY-MM-DD')
+	console.log(fecha)
 	const dataDocumento = [
 		{ value: 'Boleta', label: 'Boleta' },
 		{ value: 'Factura', label: 'Factura' }
@@ -75,7 +77,7 @@ const Abono = () => {
 				tipoComprobante: values.tipoComprobante,
 				numeroComprobante: values.numeroComprobante,
 				precioTotal: total,
-				fechaVenta: '2022-07-19',
+				fechaVenta: fecha,
 				razonSocial:
 					values.tipoComprobante === 'Factura' ? values.razonSocial : values.nombres + '' + values.apellidos,
 				tipoVenta: values.tipoVenta,
