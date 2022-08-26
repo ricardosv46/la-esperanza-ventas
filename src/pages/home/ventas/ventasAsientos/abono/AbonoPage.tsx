@@ -17,15 +17,17 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { validateVenta } from '@validation/validateVenta'
 import { IconChevronLeft } from '@icons'
+import useVendedoras from '@services/useVentas'
+import { useNavigate } from 'react-router-dom'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
 	const { tendidos } = usePreciosRefs()
 	const { onOpen, onClose, isOpen } = useToggle()
 	const { onOpen: onOpenForm, onClose: onCloseForm, isOpen: isOpenForm } = useToggle()
-
+	const router = useNavigate()
 	const { asientos, refetch: refetchAsientos } = useAsientosAbonado({ feriaId: 1, tendido: innerValue })
-	// const { createBloqueoAsiento } = useBloqueoAsientoAbono()
+	const { createVentaAbonado } = useVendedoras()
 
 	const dataDocumento = [
 		{ value: 'Boleta', label: 'Boleta' },
@@ -62,38 +64,52 @@ const Abono = () => {
 		setSeleccionados([])
 	}, [innerValue])
 
+	// const onSubmit = () => {
+	// 	console.log('elmo', values)
+	// }
+	const total = seleccionados.reduce((prev, curr) => prev + curr.precio, 0)
 	const onSubmit = () => {
-		console.log('elmo', values)
-	}
-
-	const handleVenta = () => {
-		// createBloqueoAsiento({ input: seleccionados }).then((res) => {
-		// 	if (res?.ok) {
-		// 		toast.success('Asientos Vendidos Correctamente', {
-		// 			theme: 'colored',
-		// 			position: 'top-right',
-		// 			autoClose: 5000,
-		// 			hideProgressBar: false,
-		// 			closeOnClick: true,
-		// 			pauseOnHover: true,
-		// 			draggable: true,
-		// 			progress: undefined
-		// 		})
-		// 		refetchAsientos()
-		// 		setSeleccionados([])
-		// 	} else {
-		// 		toast.error(res?.error, {
-		// 			theme: 'colored',
-		// 			position: 'top-right',
-		// 			autoClose: 5000,
-		// 			hideProgressBar: false,
-		// 			closeOnClick: true,
-		// 			pauseOnHover: true,
-		// 			draggable: true,
-		// 			progress: undefined
-		// 		})
-		// 	}
-		// })
+		createVentaAbonado({
+			input1: {
+				tipoComprobante: values.tipoComprobante,
+				numeroComprobante: values.numeroComprobante,
+				precioTotal: total,
+				fechaVenta: '2022-07-19',
+				razonSocial:
+					values.tipoComprobante === 'Factura' ? values.razonSocial : values.nombres + '' + values.apellidos,
+				tipoVenta: values.tipoVenta,
+				celular: values.celular,
+				email: values.email
+			},
+			input2: seleccionados
+		}).then((res) => {
+			if (res?.ok) {
+				toast.success('Asientos Vendidos Correctamente', {
+					theme: 'colored',
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined
+				})
+				refetchAsientos()
+				setSeleccionados([])
+				router('/ventas')
+			} else {
+				toast.error(res?.error, {
+					theme: 'colored',
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined
+				})
+			}
+		})
 	}
 
 	const { values, errors, touched, ...form } = useFormik({
@@ -110,8 +126,6 @@ const Abono = () => {
 			tipoVenta: ''
 		}
 	})
-
-	const total = seleccionados.reduce((prev, curr) => prev + curr.precio, 0)
 
 	return (
 		<>

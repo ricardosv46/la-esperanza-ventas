@@ -56,6 +56,15 @@ export type AsignacionEntradaInput = {
 	tipoDocumento?: InputMaybe<Scalars['String']>
 }
 
+export type AsignacionEntradaVentaInput = {
+	apellidos?: InputMaybe<Scalars['String']>
+	asientoId?: InputMaybe<Scalars['ID']>
+	code?: InputMaybe<Scalars['String']>
+	nombres?: InputMaybe<Scalars['String']>
+	numDocumento?: InputMaybe<Scalars['String']>
+	tipoDocumento?: InputMaybe<Scalars['String']>
+}
+
 export type Asistente = {
 	__typename?: 'Asistente'
 	apellidos?: Maybe<Scalars['String']>
@@ -115,6 +124,7 @@ export type DetallePedidoInput = {
 
 export type DetalleVenta = {
 	__typename?: 'DetalleVenta'
+	Evento?: Maybe<Evento>
 	asiento?: Maybe<Scalars['String']>
 	codigo?: Maybe<Scalars['String']>
 	detalleVentaId?: Maybe<Scalars['ID']>
@@ -288,6 +298,7 @@ export type Mutation = {
 	RecoverPassword?: Maybe<Scalars['String']>
 	RestartAsientos?: Maybe<Scalars['String']>
 	UpdateAsignacionEntrada?: Maybe<AsignacionEntrada>
+	UpdateAsignacionEntradaVenta?: Maybe<AsignacionEntrada>
 	UpdateAsistencia?: Maybe<Asistente>
 	UpdateEstadoEvento?: Maybe<Evento>
 	UpdateEstadoVendedora?: Maybe<Vendedora>
@@ -378,6 +389,10 @@ export type MutationRestartAsientosArgs = {
 
 export type MutationUpdateAsignacionEntradaArgs = {
 	input: AsignacionEntradaInput
+}
+
+export type MutationUpdateAsignacionEntradaVentaArgs = {
+	input: AsignacionEntradaVentaInput
 }
 
 export type MutationUpdateAsistenciaArgs = {
@@ -754,6 +769,16 @@ export type LoginMutation = {
 	} | null
 }
 
+export type CreateVentaAbonadoMutationVariables = Exact<{
+	input1: VentaInput
+	input2?: InputMaybe<Array<DetalleVentaInput> | DetalleVentaInput>
+}>
+
+export type CreateVentaAbonadoMutation = {
+	__typename?: 'Mutation'
+	CreateVentaAbonado: { __typename?: 'Venta'; ventaId?: string | null }
+}
+
 export type GetAllAsientosQueryVariables = Exact<{
 	tendido?: InputMaybe<Scalars['String']>
 	eventoId?: InputMaybe<Scalars['Int']>
@@ -970,6 +995,51 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>
+export const CreateVentaAbonadoDocument = gql`
+	mutation CreateVentaAbonado($input1: VentaInput!, $input2: [DetalleVentaInput!]) {
+		CreateVentaAbonado(input1: $input1, input2: $input2) {
+			ventaId
+		}
+	}
+`
+export type CreateVentaAbonadoMutationFn = Apollo.MutationFunction<
+	CreateVentaAbonadoMutation,
+	CreateVentaAbonadoMutationVariables
+>
+
+/**
+ * __useCreateVentaAbonadoMutation__
+ *
+ * To run a mutation, you first call `useCreateVentaAbonadoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVentaAbonadoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVentaAbonadoMutation, { data, loading, error }] = useCreateVentaAbonadoMutation({
+ *   variables: {
+ *      input1: // value for 'input1'
+ *      input2: // value for 'input2'
+ *   },
+ * });
+ */
+export function useCreateVentaAbonadoMutation(
+	baseOptions?: Apollo.MutationHookOptions<CreateVentaAbonadoMutation, CreateVentaAbonadoMutationVariables>
+) {
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useMutation<CreateVentaAbonadoMutation, CreateVentaAbonadoMutationVariables>(
+		CreateVentaAbonadoDocument,
+		options
+	)
+}
+export type CreateVentaAbonadoMutationHookResult = ReturnType<typeof useCreateVentaAbonadoMutation>
+export type CreateVentaAbonadoMutationResult = Apollo.MutationResult<CreateVentaAbonadoMutation>
+export type CreateVentaAbonadoMutationOptions = Apollo.BaseMutationOptions<
+	CreateVentaAbonadoMutation,
+	CreateVentaAbonadoMutationVariables
+>
 export const GetAllAsientosDocument = gql`
 	query GetAllAsientos($tendido: String, $eventoId: Int) {
 		GetAllAsientos(tendido: $tendido, eventoId: $eventoId) {

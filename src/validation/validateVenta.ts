@@ -25,6 +25,14 @@ export const validateVenta = (values: FormikValues) => {
 		if (values.numeroComprobante.length !== 8) {
 			errors.numeroComprobante = 'El Documento debe tener 8 dígitos'
 		}
+
+		if (isEmpty(values.nombres)) {
+			errors.nombres = 'El nombre es requerido'
+		}
+
+		if (isEmpty(values.apellidos)) {
+			errors.apellidos = 'El apellido es requerido'
+		}
 	}
 
 	if (isRUC) {
@@ -45,14 +53,6 @@ export const validateVenta = (values: FormikValues) => {
 		errors.celular = 'El número es requerido'
 	}
 
-	if (isEmpty(values.nombres)) {
-		errors.nombres = 'El nombre es requerido'
-	}
-
-	if (isEmpty(values.apellidos)) {
-		errors.apellidos = 'El apellido es requerido'
-	}
-
 	if (isEmpty(values.email)) {
 		errors.email = 'El Correo es requerido'
 	}
@@ -70,6 +70,6 @@ export const validateVenta = (values: FormikValues) => {
 	if (isEmpty(values.tipoVenta)) {
 		errors.tipoVenta = 'El Tipo de pago es requerido'
 	}
-
+	console.log(errors)
 	return errors
 }
