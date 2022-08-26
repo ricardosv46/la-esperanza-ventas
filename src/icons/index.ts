@@ -18,6 +18,7 @@ import IconChevronRight from './IconChevronRight'
 import IconChevronUp from './IconChevronUp'
 import IconSearchMinus from './IconSearchMinus'
 import IconSearchPlus from './IconSearchPlus'
+import IconUser from './IconUser'
 export {
 	IconLogo,
 	IconBars,
@@ -38,5 +39,6 @@ export {
 	IconChevronRight,
 	IconChevronUp,
 	IconSearchPlus,
-	IconSearchMinus
+	IconSearchMinus,
+	IconUser
 }

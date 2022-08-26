@@ -749,6 +749,26 @@ export type VentaInput = {
 	ventaId?: InputMaybe<Scalars['ID']>
 }
 
+export type CreateVentaMutationVariables = Exact<{
+	input1: VentaInput
+	input2?: InputMaybe<Array<DetalleVentaInput> | DetalleVentaInput>
+}>
+
+export type CreateVentaMutation = {
+	__typename?: 'Mutation'
+	CreateVenta: { __typename?: 'Venta'; ventaId?: string | null }
+}
+
+export type CreateVentaAbonadoMutationVariables = Exact<{
+	input1: VentaInput
+	input2?: InputMaybe<Array<DetalleVentaInput> | DetalleVentaInput>
+}>
+
+export type CreateVentaAbonadoMutation = {
+	__typename?: 'Mutation'
+	CreateVentaAbonado: { __typename?: 'Venta'; ventaId?: string | null }
+}
+
 export type LoginMutationVariables = Exact<{
 	input: LoginInput
 }>
@@ -769,14 +789,13 @@ export type LoginMutation = {
 	} | null
 }
 
-export type CreateVentaAbonadoMutationVariables = Exact<{
-	input1: VentaInput
-	input2?: InputMaybe<Array<DetalleVentaInput> | DetalleVentaInput>
+export type UpdateAsignacionEntradaVentaMutationVariables = Exact<{
+	input: AsignacionEntradaVentaInput
 }>
 
-export type CreateVentaAbonadoMutation = {
+export type UpdateAsignacionEntradaVentaMutation = {
 	__typename?: 'Mutation'
-	CreateVentaAbonado: { __typename?: 'Venta'; ventaId?: string | null }
+	UpdateAsignacionEntradaVenta?: { __typename?: 'AsignacionEntrada'; userId?: number | null } | null
 }
 
 export type GetAllAsientosQueryVariables = Exact<{
@@ -954,47 +973,71 @@ export type GetFeriaQuery = {
 	} | null
 }
 
-export const LoginDocument = gql`
-	mutation Login($input: LoginInput!) {
-		Login(input: $input) {
-			id
-			email
-			tipoUsuario
-			tipoDocumento
-			numeroDocumento
-			nombres
-			apellidos
-			celular
-			apiToken
+export type GetVentaIdQueryVariables = Exact<{
+	ventaId?: InputMaybe<Scalars['Int']>
+}>
+
+export type GetVentaIdQuery = {
+	__typename?: 'Query'
+	GetVentaId?: {
+		__typename?: 'Venta'
+		ventaId?: string | null
+		tipoComprobante?: string | null
+		razonSocial?: string | null
+		celular?: string | null
+		precioTotal?: number | null
+		fechaVenta?: any | null
+		usuarioId?: number | null
+		DetalleVenta?: Array<{
+			__typename?: 'DetalleVenta'
+			detalleVentaId?: string | null
+			tendido?: string | null
+			codigo?: string | null
+			asiento?: string | null
+			precio?: number | null
+			feriaId?: number | null
+			eventoId?: number | null
+			Evento?: { __typename?: 'Evento'; titulo?: string | null } | null
+		}> | null
+	} | null
+}
+
+export const CreateVentaDocument = gql`
+	mutation CreateVenta($input1: VentaInput!, $input2: [DetalleVentaInput!]) {
+		CreateVenta(input1: $input1, input2: $input2) {
+			ventaId
 		}
 	}
 `
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>
+export type CreateVentaMutationFn = Apollo.MutationFunction<CreateVentaMutation, CreateVentaMutationVariables>
 
 /**
- * __useLoginMutation__
+ * __useCreateVentaMutation__
  *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateVentaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVentaMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ * const [createVentaMutation, { data, loading, error }] = useCreateVentaMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input1: // value for 'input1'
+ *      input2: // value for 'input2'
  *   },
  * });
  */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+export function useCreateVentaMutation(
+	baseOptions?: Apollo.MutationHookOptions<CreateVentaMutation, CreateVentaMutationVariables>
+) {
 	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options)
+	return Apollo.useMutation<CreateVentaMutation, CreateVentaMutationVariables>(CreateVentaDocument, options)
 }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>
+export type CreateVentaMutationHookResult = ReturnType<typeof useCreateVentaMutation>
+export type CreateVentaMutationResult = Apollo.MutationResult<CreateVentaMutation>
+export type CreateVentaMutationOptions = Apollo.BaseMutationOptions<CreateVentaMutation, CreateVentaMutationVariables>
 export const CreateVentaAbonadoDocument = gql`
 	mutation CreateVentaAbonado($input1: VentaInput!, $input2: [DetalleVentaInput!]) {
 		CreateVentaAbonado(input1: $input1, input2: $input2) {
@@ -1039,6 +1082,94 @@ export type CreateVentaAbonadoMutationResult = Apollo.MutationResult<CreateVenta
 export type CreateVentaAbonadoMutationOptions = Apollo.BaseMutationOptions<
 	CreateVentaAbonadoMutation,
 	CreateVentaAbonadoMutationVariables
+>
+export const LoginDocument = gql`
+	mutation Login($input: LoginInput!) {
+		Login(input: $input) {
+			id
+			email
+			tipoUsuario
+			tipoDocumento
+			numeroDocumento
+			nombres
+			apellidos
+			celular
+			apiToken
+		}
+	}
+`
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options)
+}
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>
+export const UpdateAsignacionEntradaVentaDocument = gql`
+	mutation UpdateAsignacionEntradaVenta($input: AsignacionEntradaVentaInput!) {
+		UpdateAsignacionEntradaVenta(input: $input) {
+			userId
+		}
+	}
+`
+export type UpdateAsignacionEntradaVentaMutationFn = Apollo.MutationFunction<
+	UpdateAsignacionEntradaVentaMutation,
+	UpdateAsignacionEntradaVentaMutationVariables
+>
+
+/**
+ * __useUpdateAsignacionEntradaVentaMutation__
+ *
+ * To run a mutation, you first call `useUpdateAsignacionEntradaVentaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAsignacionEntradaVentaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAsignacionEntradaVentaMutation, { data, loading, error }] = useUpdateAsignacionEntradaVentaMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAsignacionEntradaVentaMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		UpdateAsignacionEntradaVentaMutation,
+		UpdateAsignacionEntradaVentaMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useMutation<UpdateAsignacionEntradaVentaMutation, UpdateAsignacionEntradaVentaMutationVariables>(
+		UpdateAsignacionEntradaVentaDocument,
+		options
+	)
+}
+export type UpdateAsignacionEntradaVentaMutationHookResult = ReturnType<typeof useUpdateAsignacionEntradaVentaMutation>
+export type UpdateAsignacionEntradaVentaMutationResult = Apollo.MutationResult<UpdateAsignacionEntradaVentaMutation>
+export type UpdateAsignacionEntradaVentaMutationOptions = Apollo.BaseMutationOptions<
+	UpdateAsignacionEntradaVentaMutation,
+	UpdateAsignacionEntradaVentaMutationVariables
 >
 export const GetAllAsientosDocument = gql`
 	query GetAllAsientos($tendido: String, $eventoId: Int) {
@@ -1414,3 +1545,58 @@ export function useGetFeriaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetFeriaQueryHookResult = ReturnType<typeof useGetFeriaQuery>
 export type GetFeriaLazyQueryHookResult = ReturnType<typeof useGetFeriaLazyQuery>
 export type GetFeriaQueryResult = Apollo.QueryResult<GetFeriaQuery, GetFeriaQueryVariables>
+export const GetVentaIdDocument = gql`
+	query GetVentaId($ventaId: Int) {
+		GetVentaId(ventaId: $ventaId) {
+			ventaId
+			tipoComprobante
+			razonSocial
+			celular
+			precioTotal
+			fechaVenta
+			usuarioId
+			DetalleVenta {
+				detalleVentaId
+				tendido
+				codigo
+				asiento
+				precio
+				feriaId
+				eventoId
+				Evento {
+					titulo
+				}
+			}
+		}
+	}
+`
+
+/**
+ * __useGetVentaIdQuery__
+ *
+ * To run a query within a React component, call `useGetVentaIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVentaIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVentaIdQuery({
+ *   variables: {
+ *      ventaId: // value for 'ventaId'
+ *   },
+ * });
+ */
+export function useGetVentaIdQuery(baseOptions?: Apollo.QueryHookOptions<GetVentaIdQuery, GetVentaIdQueryVariables>) {
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<GetVentaIdQuery, GetVentaIdQueryVariables>(GetVentaIdDocument, options)
+}
+export function useGetVentaIdLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<GetVentaIdQuery, GetVentaIdQueryVariables>
+) {
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<GetVentaIdQuery, GetVentaIdQueryVariables>(GetVentaIdDocument, options)
+}
+export type GetVentaIdQueryHookResult = ReturnType<typeof useGetVentaIdQuery>
+export type GetVentaIdLazyQueryHookResult = ReturnType<typeof useGetVentaIdLazyQuery>
+export type GetVentaIdQueryResult = Apollo.QueryResult<GetVentaIdQuery, GetVentaIdQueryVariables>

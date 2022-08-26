@@ -1,6 +1,6 @@
 import { classNames } from '@utils/classNames'
 import { generatedTotal } from '@utils/generatedTotal'
-import { Dispatch, ReactElement, useState } from 'react'
+import { Component, Dispatch, ReactElement, ReactNode, useState } from 'react'
 import Paginator from '../Paginator/Paginator'
 import styles from './table.module.css'
 interface State {
@@ -9,6 +9,8 @@ interface State {
 }
 
 interface Props {
+	actions: ({ id, data }: { id: string; data?: any }) => ReactElement
+	rowId: string
 	data: any
 	className?: string
 	th: any
@@ -19,7 +21,7 @@ interface Props {
 	nTotal?: number
 }
 
-const Table = ({ th, td, className, widthPaginator, state, setState, nTotal, data }: Props) => {
+const Table = ({ th, td, className, widthPaginator, state, setState, nTotal, data, actions: Action, rowId }: Props) => {
 	const paginas = widthPaginator && nTotal && nTotal > 0 ? generatedTotal(nTotal!, state?.numberPaginate!) : []
 
 	return (
@@ -40,11 +42,24 @@ const Table = ({ th, td, className, widthPaginator, state, setState, nTotal, dat
 							<tr
 								key={i}
 								className='dark:bg-transparent dark:text-slate-50 dark:hover:bg-slate-900 dark:border-b-slate-700'>
-								{td.map((td: any, index: any) => (
-									<td key={index} className='text-center'>
-										{row[td]}
-									</td>
-								))}
+								{td.map((td: any, index: any) => {
+									if (Array.isArray(td)) {
+										return (
+											<td key={row[td[0]][td[1]]} className='text-center '>
+												{row[td[0]][td[1]]}
+											</td>
+										)
+									} else {
+										return (
+											<td key={index} className='text-center '>
+												{row[td]}
+											</td>
+										)
+									}
+								})}
+								<td className='text-center '>
+									<Action id={row[rowId]} data={row} />
+								</td>
 							</tr>
 						))}
 					</tbody>

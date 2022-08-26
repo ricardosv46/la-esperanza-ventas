@@ -2,7 +2,7 @@ import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
 import { Show } from '@components/shared/Show/Show'
 import Spinner from '@components/shared/Spinner/Spinner'
 import Table from '@components/shared/Table/Table'
-import { IconPlus } from '@icons'
+import { IconEye, IconPlus } from '@icons'
 import useVendedoras from '@services/useVentas'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -14,10 +14,25 @@ const dataTHead = [
 	'Email',
 	'Fecha Venta',
 	'Tipo Pago',
-	'Nombres o Razón social'
+	'Nombres o Razón social',
+	'Acciones'
 ]
 
 const dataTBody = ['tipoComprobante', 'numeroComprobante', 'celular', 'email', 'fechaVenta', 'tipoVenta', 'razonSocial']
+
+const VerDetalle = ({ id }: { id: string }) => {
+	const router = useNavigate()
+	return (
+		<button
+			className='text-center btn-icon btn-ghost-primary'
+			onClick={() => {
+				console.log(id)
+				router(id)
+			}}>
+			<IconEye />
+		</button>
+	)
+}
 
 const VentasPage = () => {
 	const router = useNavigate()
@@ -40,6 +55,8 @@ const VentasPage = () => {
 			}>
 			<Show condition={loading} loading isDefault={<Spinner className='w-10 h-10 mx-auto my-20 border-4' />}>
 				<Table
+					rowId={'ventaId'}
+					actions={VerDetalle}
 					th={dataTHead}
 					data={ventas}
 					td={dataTBody}

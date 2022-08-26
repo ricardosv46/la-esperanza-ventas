@@ -19,6 +19,7 @@ import { validateVenta } from '@validation/validateVenta'
 import { IconChevronLeft } from '@icons'
 import useVendedoras from '@services/useVentas'
 import { useNavigate } from 'react-router-dom'
+import Spinner from '@components/shared/Spinner/Spinner'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
@@ -27,7 +28,7 @@ const Abono = () => {
 	const { onOpen: onOpenForm, onClose: onCloseForm, isOpen: isOpenForm } = useToggle()
 	const router = useNavigate()
 	const { asientos, refetch: refetchAsientos } = useAsientosAbonado({ feriaId: 1, tendido: innerValue })
-	const { createVentaAbonado } = useVendedoras()
+	const { createVentaAbonado, loadingVentaAbonado } = useVendedoras()
 
 	const dataDocumento = [
 		{ value: 'Boleta', label: 'Boleta' },
@@ -208,10 +209,10 @@ const Abono = () => {
 					</div>
 				</Show>
 				<Show condition={isOpenForm}>
-					<div className='flex items-center justify-center gap-10 mt-10 '>
+					<div className='flex flex-col items-center justify-center gap-10 mt-10 lg:flex-row '>
 						<form
 							onSubmit={form.handleSubmit}
-							className='grid w-full max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2'>
+							className='flex flex-col w-full gap-5 md:grid sm:grid-cols-2'>
 							<Select
 								label='Tipo Comprobante'
 								value={values.tipoComprobante}
@@ -294,10 +295,10 @@ const Abono = () => {
 							<div className='flex items-center justify-center col-span-2'>
 								<button
 									type='submit'
-									// disabled={loadingLogin}
-									className='w-1/3 btn btn-solid-primary'>
+									disabled={loadingVentaAbonado || seleccionados.length === 0}
+									className='w-full sm:w-auto xl:w-1/3 btn btn-solid-primary'>
 									Crear Venta
-									{/* {loadingLogin && <Spinner />} */}
+									{loadingVentaAbonado && <Spinner />}
 								</button>
 							</div>
 						</form>
@@ -345,13 +346,6 @@ const Abono = () => {
 					</div>
 				</Show>
 			</PlantillaPage>
-			{/* <ModalConfirmar
-				isOpen={isOpen}
-				onClick={handleVenta}
-				onClose={onClose}
-				header='Vender'
-				body='¿Estas seguro que deseas vender este asiento?'
-			/> */}
 		</>
 	)
 }
