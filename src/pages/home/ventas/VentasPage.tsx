@@ -12,13 +12,14 @@ const dataTHead = [
 	'Documento',
 	'Celular',
 	'Email',
+	'Monto',
 	'Fecha Venta',
 	'Tipo Pago',
 	'Nombres o Razón social',
 	'Acciones'
 ]
 
-const dataTBody = ['tipoComprobante', 'numeroComprobante', 'celular', 'email', 'fechaVenta', 'tipoVenta', 'razonSocial']
+const dataTBody = ['tipoComprobante', 'numeroComprobante', 'celular', 'email', 'precioTotal','fechaVenta', 'tipoVenta', 'razonSocial']
 
 const VerDetalle = ({ id }: { id: string }) => {
 	const router = useNavigate()

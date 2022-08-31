@@ -1,19 +1,17 @@
 import PlantillaPage from '@components/PlantillaPage/PlantillaPage'
-import ModalConfirmar from '@components/shared/Modal/ModalConfirmar'
 import ModalRegistrarAsientoVenta from '@components/shared/Modal/ModalRegistrarAsientoVenta'
 import { Show } from '@components/shared/Show/Show'
 import Spinner from '@components/shared/Spinner/Spinner'
 import Table from '@components/shared/Table/Table'
 import useToggle from '@hooks/useToggle'
-import { IconEye, IconPlus, IconUser } from '@icons'
+import { IconUser } from '@icons'
 import { useVentaId } from '@services/useVentaId'
-import useVendedoras from '@services/useVentas'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-const dataTHead = ['Codigo', 'Asiento', 'Tendido', 'Evento', 'Acciones']
+const dataTHead = ['Codigo', 'Asiento', 'Tendido', 'Monto', 'Evento', 'Acciones']
 
-const dataTBody = ['codigo', 'asiento', 'tendido', ['Evento', 'titulo']]
+const dataTBody = ['codigo', 'asiento', 'tendido', 'precio', ['Evento', 'titulo']]
 
 const DetalleVenta = () => {
 	const { onClose, isOpen, onOpen } = useToggle()
@@ -23,7 +21,7 @@ const DetalleVenta = () => {
 		ventaId: Number(id)
 	})
 
-	console.log(venta.DetalleVenta)
+	console.log({ venta })
 
 	const handleUpdate = () => {}
 

@@ -26,7 +26,6 @@ const dataDocumento = [
 const ModalRegistrarAsientoVenta = ({ isOpen, onClick, onClose, body, header, data }: IModal) => {
 	const { updateAsientoVenta, loadingUpdateAsiento } = useVentaId()
 	const code = `${data?.codigo}-${data?.asiento}-${data?.eventoId}`
-	console.log({ data })
 	const onSubmit = () => {
 		updateAsientoVenta({
 			tipoDocumento: values.tipoDocumento,
