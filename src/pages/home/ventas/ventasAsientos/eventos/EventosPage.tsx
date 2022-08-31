@@ -26,7 +26,6 @@ const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
 	const { tendidos } = usePreciosRefs()
-	const { onOpen, onClose, isOpen } = useToggle()
 	const { onOpen: onOpenForm, onClose: onCloseForm, isOpen: isOpenForm } = useToggle()
 	const router = useNavigate()
 	const { state: eventos } = useLocation() as any
@@ -172,6 +171,7 @@ const Abono = () => {
 								doble={innerValue === 'T2S' ? 'Tendido2' : innerValue === 'T3' ? 'Tendido3' : 'Ruedo'}
 								direccion={innerValue === 'T3A' ? 'end' : innerValue === 'T3B' ? 'start' : 'center'}
 								id={innerValue}
+								evento={evento?.eventoId}
 							/>
 						)}
 					</div>
