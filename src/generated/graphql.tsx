@@ -829,10 +829,11 @@ export type Venta = {
   celular?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   fechaVenta?: Maybe<Scalars['Date']>;
-  numeroComprobante?: Maybe<Scalars['String']>;
+  numeroDocumento?: Maybe<Scalars['String']>;
   precioTotal?: Maybe<Scalars['Float']>;
   razonSocial?: Maybe<Scalars['String']>;
   tipoComprobante?: Maybe<Scalars['String']>;
+  tipoDocumento?: Maybe<Scalars['String']>;
   tipoVenta?: Maybe<Scalars['String']>;
   usuarioId?: Maybe<Scalars['Int']>;
   ventaId?: Maybe<Scalars['ID']>;
@@ -842,10 +843,11 @@ export type VentaInput = {
   celular?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   fechaVenta?: InputMaybe<Scalars['Date']>;
-  numeroComprobante?: InputMaybe<Scalars['String']>;
+  numeroDocumento?: InputMaybe<Scalars['String']>;
   precioTotal?: InputMaybe<Scalars['Float']>;
   razonSocial?: InputMaybe<Scalars['String']>;
   tipoComprobante?: InputMaybe<Scalars['String']>;
+  tipoDocumento?: InputMaybe<Scalars['String']>;
   tipoVenta?: InputMaybe<Scalars['String']>;
   transaccionId?: InputMaybe<Scalars['Float']>;
   ventaId?: InputMaybe<Scalars['ID']>;
@@ -923,7 +925,7 @@ export type GetAllVentasQueryVariables = Exact<{
 }>;
 
 
-export type GetAllVentasQuery = { __typename?: 'Query', GetAllVentas?: { __typename?: 'GetAllVentas', numeroTotal?: number | null, data?: Array<{ __typename?: 'Venta', ventaId?: string | null, tipoComprobante?: string | null, numeroComprobante?: string | null, razonSocial?: string | null, celular?: string | null, tipoVenta?: string | null, email?: string | null, precioTotal?: number | null, fechaVenta?: any | null, DetalleVenta?: Array<{ __typename?: 'DetalleVenta', detalleVentaId?: string | null, tendido?: string | null, codigo?: string | null, asiento?: string | null, precio?: number | null, eventoId?: number | null, feriaId?: number | null, ventaId?: number | null }> | null }> | null } | null };
+export type GetAllVentasQuery = { __typename?: 'Query', GetAllVentas?: { __typename?: 'GetAllVentas', numeroTotal?: number | null, data?: Array<{ __typename?: 'Venta', ventaId?: string | null, tipoComprobante?: string | null, tipoDocumento?: string | null, numeroDocumento?: string | null, razonSocial?: string | null, celular?: string | null, tipoVenta?: string | null, email?: string | null, precioTotal?: number | null, fechaVenta?: any | null, DetalleVenta?: Array<{ __typename?: 'DetalleVenta', detalleVentaId?: string | null, tendido?: string | null, codigo?: string | null, asiento?: string | null, precio?: number | null, eventoId?: number | null, feriaId?: number | null, ventaId?: number | null }> | null }> | null } | null };
 
 export type GetFeriaQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1306,7 +1308,8 @@ export const GetAllVentasDocument = gql`
     data {
       ventaId
       tipoComprobante
-      numeroComprobante
+      tipoDocumento
+      numeroDocumento
       razonSocial
       celular
       tipoVenta

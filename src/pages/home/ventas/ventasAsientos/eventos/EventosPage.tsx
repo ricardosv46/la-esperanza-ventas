@@ -37,11 +37,16 @@ const Abono = () => {
 	})
 	const { createVentaEvento, loadingVentaAbonado } = useVendedoras()
 
-	const dataDocumento = [
+	const dataComprobante = [
 		{ value: 'Boleta', label: 'Boleta' },
 		{ value: 'Factura', label: 'Factura' }
 	]
 
+	const dataDocumento = [
+		{ value: 'DNI', label: 'DNI' },
+		{ value: 'CE', label: 'Carnet' },
+		{ value: 'Pasaporte', label: 'Pasaporte' }
+	]
 	const dataTipoVenta = [
 		{ value: 'Efectivo', label: 'Efectivo' },
 		{ value: 'Tarjeta', label: 'Tarjeta' }
@@ -80,7 +85,8 @@ const Abono = () => {
 		createVentaEvento({
 			input1: {
 				tipoComprobante: values.tipoComprobante,
-				numeroComprobante: values.numeroComprobante,
+				tipoDocumento: values.tipoComprobante === 'Factura' ? 'RUC' : values.tipoDocumento,
+				numeroDocumento: values.numeroDocumento,
 				precioTotal: total,
 				fechaVenta: fecha,
 				razonSocial:
@@ -125,8 +131,9 @@ const Abono = () => {
 		onSubmit,
 		initialValues: {
 			tipoComprobante: '',
+			tipoDocumento: '',
+			numeroDocumento: '',
 			email: '',
-			numeroComprobante: '',
 			celular: '',
 			razonSocial: '',
 			nombres: '',
@@ -224,7 +231,7 @@ const Abono = () => {
 							<Select
 								label='Tipo Comprobante'
 								value={values.tipoComprobante}
-								options={dataDocumento}
+								options={dataComprobante}
 								onChange={({ value }) => {
 									form.setFieldValue('tipoComprobante', value)
 								}}
@@ -235,12 +242,37 @@ const Abono = () => {
 								error={errors.tipoComprobante}
 								touched={touched?.tipoComprobante ?? false}
 							/>
+							{values.tipoComprobante === 'Boleta' && (
+								<Select
+									label='Tipo Documento'
+									value={values.tipoDocumento}
+									options={dataDocumento}
+									onChange={({ value }) => {
+										form.setFieldValue('tipoDocumento', value)
+									}}
+									dataExtractor={{
+										label: 'label',
+										value: 'value'
+									}}
+									error={errors.tipoDocumento}
+									touched={touched?.tipoDocumento ?? false}
+								/>
+							)}
 							<Input
 								type='text'
 								label={values.tipoComprobante === 'Factura' ? 'RUC' : 'Documento'}
-								{...form.getFieldProps('numeroComprobante')}
-								error={errors.numeroComprobante}
-								touched={touched?.numeroComprobante ?? false}
+								{...form.getFieldProps('numeroDocumento')}
+								error={errors.numeroDocumento}
+								touched={touched?.numeroDocumento ?? false}
+								maxLength={
+									values.tipoComprobante === 'Factura'
+										? 11
+										: values.tipoDocumento === 'DNI'
+										? 8
+										: values.tipoDocumento === 'CE'
+										? 9
+										: 10
+								}
 							/>
 							{values.tipoComprobante === 'Factura' && (
 								<Input
@@ -292,7 +324,6 @@ const Abono = () => {
 								touched={touched?.celular ?? false}
 							/>
 							<Input
-								className={values.tipoComprobante === 'Boleta' ? 'col-span-2' : ''}
 								type='text'
 								label='Correo'
 								{...form.getFieldProps('email')}

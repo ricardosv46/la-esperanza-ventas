@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const dataTHead = [
+	'Tipo Comprobante',
 	'Tipo Documento',
 	'Documento',
 	'Celular',
@@ -19,7 +20,17 @@ const dataTHead = [
 	'Acciones'
 ]
 
-const dataTBody = ['tipoComprobante', 'numeroComprobante', 'celular', 'email', 'precioTotal','fechaVenta', 'tipoVenta', 'razonSocial']
+const dataTBody = [
+	'tipoComprobante',
+	'tipoDocumento',
+	'numeroDocumento',
+	'celular',
+	'email',
+	'precioTotal',
+	'fechaVenta',
+	'tipoVenta',
+	'razonSocial'
+]
 
 const VerDetalle = ({ id }: { id: string }) => {
 	const router = useNavigate()

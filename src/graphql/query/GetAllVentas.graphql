@@ -4,7 +4,8 @@ query GetAllVentas($pagina: Int, $numeroPagina: Int) {
 		data {
 			ventaId
 			tipoComprobante
-			numeroComprobante
+			tipoDocumento
+			numeroDocumento
 			razonSocial
 			celular
 			tipoVenta
