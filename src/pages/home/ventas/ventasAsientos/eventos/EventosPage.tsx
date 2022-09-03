@@ -342,7 +342,12 @@ const Abono = () => {
 							</div>
 						</form>
 						<div className='p-5 text-white rounded-lg bg-primary-100'>
-							<div className='flex justify-between'>
+							<div className='flex justify-center w-full '>
+								<p className='text-2xl font-bold leading-none text-center '>
+									Evento - {evento?.titulo}
+								</p>
+							</div>
+							<div className='flex justify-between mt-2'>
 								<p className='w-[300px] text-xl font-bold'>Nro de entradas</p>
 								<p className='text-xl font-bold'>{seleccionados.length}</p>
 							</div>

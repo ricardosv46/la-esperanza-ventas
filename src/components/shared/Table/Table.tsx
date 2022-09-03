@@ -45,20 +45,20 @@ const Table = ({ th, td, className, widthPaginator, state, setState, nTotal, dat
 								{td.map((td: any, index: any) => {
 									if (Array.isArray(td)) {
 										return (
-											<td key={row[td[0]][td[1]]} className='text-center '>
-												{row[td[0]][td[1]]}
+											<td key={row?.[td?.[0]]?.[td?.[1]]} className='text-center '>
+												{row?.[td?.[0]]?.[td?.[1]]}
 											</td>
 										)
 									} else {
 										return (
 											<td key={index} className='text-center '>
-												{row[td]}
+												{row?.[td]}
 											</td>
 										)
 									}
 								})}
 								<td className='text-center '>
-									<Action id={row[rowId]} data={row} />
+									<Action id={row?.[rowId]} data={row} />
 								</td>
 							</tr>
 						))}

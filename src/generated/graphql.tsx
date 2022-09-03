@@ -33,6 +33,7 @@ export type Asiento = {
 
 export type AsignacionEntrada = {
   __typename?: 'AsignacionEntrada';
+  Evento?: Maybe<Evento>;
   apellidos?: Maybe<Scalars['String']>;
   asientoId?: Maybe<Scalars['ID']>;
   codigo?: Maybe<Scalars['String']>;
@@ -127,6 +128,7 @@ export type ButacaInput = {
 
 export type DetallePedido = {
   __typename?: 'DetallePedido';
+  Evento?: Maybe<Evento>;
   asiento?: Maybe<Scalars['String']>;
   codigo?: Maybe<Scalars['String']>;
   detallePedidoId?: Maybe<Scalars['ID']>;
@@ -324,6 +326,7 @@ export type Mutation = {
   CreateVendedora?: Maybe<Vendedora>;
   CreateVenta: Venta;
   CreateVentaAbonado: Venta;
+  DeleteAsientoBloqueado?: Maybe<Scalars['String']>;
   DeleteEvento?: Maybe<Scalars['String']>;
   DeleteImagen: Scalars['String'];
   DeleteVenta?: Maybe<Scalars['String']>;
@@ -415,6 +418,11 @@ export type MutationCreateVentaArgs = {
 export type MutationCreateVentaAbonadoArgs = {
   input1: VentaInput;
   input2?: InputMaybe<Array<DetalleVentaInput>>;
+};
+
+
+export type MutationDeleteAsientoBloqueadoArgs = {
+  asientoId: Scalars['Int'];
 };
 
 
@@ -516,7 +524,7 @@ export type MutationUpdateVendedoraArgs = {
 
 export type MutationValidacionEntradaArgs = {
   constante?: InputMaybe<Scalars['String']>;
-  fecha?: InputMaybe<Scalars['Date']>;
+  eventoId?: InputMaybe<Scalars['Int']>;
   numDocumento?: InputMaybe<Scalars['String']>;
   tipoDocumento?: InputMaybe<Scalars['String']>;
 };
@@ -599,6 +607,7 @@ export type Query = {
   __typename?: 'Query';
   GetAllAsientos?: Maybe<Array<Maybe<Asiento>>>;
   GetAllAsientosAbonados?: Maybe<Array<Maybe<Asiento>>>;
+  GetAllAsientosBloqueados?: Maybe<Array<Maybe<AsignacionEntrada>>>;
   GetAllBloques?: Maybe<Array<Maybe<Bloque>>>;
   GetAllButacaEvento?: Maybe<GetAllButacaEvento>;
   GetAllButacas?: Maybe<GetAllButacas>;
@@ -611,6 +620,7 @@ export type Query = {
   GetAllSuscriptores?: Maybe<GetAllSuscriptores>;
   GetAllVendedoras?: Maybe<GetAllVendedoras>;
   GetAllVentas?: Maybe<GetAllVentas>;
+  GetDetalleAsientoVenta?: Maybe<AsignacionEntrada>;
   GetEventoSlug?: Maybe<Evento>;
   GetFeria?: Maybe<Feria>;
   GetPedidoId?: Maybe<Pedido>;
@@ -687,6 +697,11 @@ export type QueryGetAllVendedorasArgs = {
 export type QueryGetAllVentasArgs = {
   numeroPagina?: InputMaybe<Scalars['Int']>;
   pagina?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryGetDetalleAsientoVentaArgs = {
+  code?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -926,6 +941,13 @@ export type GetAllVentasQueryVariables = Exact<{
 
 
 export type GetAllVentasQuery = { __typename?: 'Query', GetAllVentas?: { __typename?: 'GetAllVentas', numeroTotal?: number | null, data?: Array<{ __typename?: 'Venta', ventaId?: string | null, tipoComprobante?: string | null, tipoDocumento?: string | null, numeroDocumento?: string | null, razonSocial?: string | null, celular?: string | null, tipoVenta?: string | null, email?: string | null, precioTotal?: number | null, fechaVenta?: any | null, DetalleVenta?: Array<{ __typename?: 'DetalleVenta', detalleVentaId?: string | null, tendido?: string | null, codigo?: string | null, asiento?: string | null, precio?: number | null, eventoId?: number | null, feriaId?: number | null, ventaId?: number | null }> | null }> | null } | null };
+
+export type GetDetalleAsientoVentaQueryVariables = Exact<{
+  code?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetDetalleAsientoVentaQuery = { __typename?: 'Query', GetDetalleAsientoVenta?: { __typename?: 'AsignacionEntrada', asientoId?: string | null, nombres?: string | null, tipoDocumento?: string | null, numDocumento?: string | null, apellidos?: string | null, reservado?: string | null, tendido?: string | null, codigo?: string | null, fecha?: any | null, hora?: string | null } | null };
 
 export type GetFeriaQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1360,6 +1382,51 @@ export function useGetAllVentasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetAllVentasQueryHookResult = ReturnType<typeof useGetAllVentasQuery>;
 export type GetAllVentasLazyQueryHookResult = ReturnType<typeof useGetAllVentasLazyQuery>;
 export type GetAllVentasQueryResult = Apollo.QueryResult<GetAllVentasQuery, GetAllVentasQueryVariables>;
+export const GetDetalleAsientoVentaDocument = gql`
+    query GetDetalleAsientoVenta($code: String) {
+  GetDetalleAsientoVenta(code: $code) {
+    asientoId
+    nombres
+    tipoDocumento
+    numDocumento
+    nombres
+    apellidos
+    reservado
+    tendido
+    codigo
+    fecha
+    hora
+  }
+}
+    `;
+
+/**
+ * __useGetDetalleAsientoVentaQuery__
+ *
+ * To run a query within a React component, call `useGetDetalleAsientoVentaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetalleAsientoVentaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetalleAsientoVentaQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useGetDetalleAsientoVentaQuery(baseOptions?: Apollo.QueryHookOptions<GetDetalleAsientoVentaQuery, GetDetalleAsientoVentaQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDetalleAsientoVentaQuery, GetDetalleAsientoVentaQueryVariables>(GetDetalleAsientoVentaDocument, options);
+      }
+export function useGetDetalleAsientoVentaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDetalleAsientoVentaQuery, GetDetalleAsientoVentaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDetalleAsientoVentaQuery, GetDetalleAsientoVentaQueryVariables>(GetDetalleAsientoVentaDocument, options);
+        }
+export type GetDetalleAsientoVentaQueryHookResult = ReturnType<typeof useGetDetalleAsientoVentaQuery>;
+export type GetDetalleAsientoVentaLazyQueryHookResult = ReturnType<typeof useGetDetalleAsientoVentaLazyQuery>;
+export type GetDetalleAsientoVentaQueryResult = Apollo.QueryResult<GetDetalleAsientoVentaQuery, GetDetalleAsientoVentaQueryVariables>;
 export const GetFeriaDocument = gql`
     query GetFeria {
   GetFeria {

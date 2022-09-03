@@ -337,6 +337,9 @@ const Abono = () => {
 							</div>
 						</form>
 						<div className='p-5 text-white rounded-lg bg-primary-100'>
+							<div className='flex justify-center w-full '>
+								<p className='text-2xl font-bold leading-none '>Abono</p>
+							</div>
 							<div className='flex justify-between'>
 								<p className='w-[300px] text-xl font-bold'>Nro de entradas</p>
 								<p className='text-xl font-bold'>{seleccionados.length}</p>

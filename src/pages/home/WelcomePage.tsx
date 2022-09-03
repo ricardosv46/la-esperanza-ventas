@@ -19,7 +19,7 @@ const WelcomePage = () => {
 						Bienvenid@ {user?.nombres}
 					</h1>
 					<p>
-						Desde el panel de administración podrás,agregar,modificar,eliminar información referente atu
+						Desde el panel de administración podrás,agregar,modificar,eliminar información referente a tu
 						tienda.
 					</p>
 					<p>

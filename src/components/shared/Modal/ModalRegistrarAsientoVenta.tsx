@@ -1,4 +1,5 @@
 import { IconClose } from '@icons'
+import { useVentaAsientoId } from '@services/useVentaAsientoId'
 import { useVentaId } from '@services/useVentaId'
 import useVendedoras from '@services/useVentas'
 import { validateUpdateAsiento } from '@validation/validateUpdateAsiento'
@@ -26,6 +27,7 @@ const dataDocumento = [
 const ModalRegistrarAsientoVenta = ({ isOpen, onClick, onClose, body, header, data }: IModal) => {
 	const { updateAsientoVenta, loadingUpdateAsiento } = useVentaId()
 	const code = `${data?.codigo}-${data?.asiento}-${data?.eventoId}`
+	const { asiento, loading: loadingDataAsiento } = useVentaAsientoId({ code })
 	const onSubmit = () => {
 		updateAsientoVenta({
 			tipoDocumento: values.tipoDocumento,
@@ -61,7 +63,7 @@ const ModalRegistrarAsientoVenta = ({ isOpen, onClick, onClose, body, header, da
 		})
 	}
 
-	const { values, errors, touched, handleReset, handleSubmit, ...form } = useFormik({
+	const { values, errors, touched, handleReset, setValues, handleSubmit, ...form } = useFormik({
 		validate: validateUpdateAsiento,
 		onSubmit,
 		initialValues: {
@@ -73,10 +75,22 @@ const ModalRegistrarAsientoVenta = ({ isOpen, onClick, onClose, body, header, da
 	})
 
 	useEffect(() => {
-		return () => {
-			handleReset({})
+		if (!loadingDataAsiento) {
+			setValues({
+				tipoDocumento: asiento?.tipoDocumento ?? '',
+				numDocumento: asiento?.numDocumento ?? '',
+				nombres: asiento?.nombres ?? '',
+				apellidos: asiento?.apellidos ?? ''
+			})
+		} else {
+			handleReset({
+				tipoDocumento: '',
+				numDocumento: '',
+				nombres: '',
+				apellidos: ''
+			})
 		}
-	}, [isOpen])
+	}, [loadingDataAsiento])
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} hasOverlay>
