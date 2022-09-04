@@ -583,6 +583,7 @@ export type Pedido = {
   __typename?: 'Pedido';
   DetallePedido?: Maybe<Array<DetallePedido>>;
   Usuario?: Maybe<User>;
+  email?: Maybe<Scalars['String']>;
   fechaPedido?: Maybe<Scalars['Date']>;
   numeroComprobante?: Maybe<Scalars['String']>;
   pedidoId?: Maybe<Scalars['ID']>;
@@ -676,8 +677,12 @@ export type QueryGetAllImagenesArgs = {
 
 
 export type QueryGetAllPedidosArgs = {
+  email?: InputMaybe<Scalars['String']>;
+  fechaFinal?: InputMaybe<Scalars['String']>;
+  fechaInicial?: InputMaybe<Scalars['String']>;
   numeroPagina?: InputMaybe<Scalars['Int']>;
   pagina?: InputMaybe<Scalars['Int']>;
+  razonSocial?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -913,6 +918,14 @@ export type GetAllAsientosAbonadosQueryVariables = Exact<{
 
 
 export type GetAllAsientosAbonadosQuery = { __typename?: 'Query', GetAllAsientosAbonados?: Array<{ __typename?: 'Asiento', asientoId?: string | null, tendido?: string | null, codigo?: string | null, reservado?: string | null, asiento?: string | null, feriaId?: number | null } | null> | null };
+
+export type GetAllButacaEventoQueryVariables = Exact<{
+  tendido?: InputMaybe<Scalars['String']>;
+  eventoId?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetAllButacaEventoQuery = { __typename?: 'Query', GetAllButacaEvento?: { __typename?: 'GetAllButacaEvento', numeroTotal?: number | null, data?: Array<{ __typename?: 'ButacaEvento', butacaEventoId?: number | null, eventoId?: number | null, tendido?: string | null, codigo?: string | null, precio?: number | null, cantidad?: number | null } | null> | null } | null };
 
 export type GetAllButacasQueryVariables = Exact<{
   tendido?: InputMaybe<Scalars['String']>;
@@ -1185,6 +1198,50 @@ export function useGetAllAsientosAbonadosLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetAllAsientosAbonadosQueryHookResult = ReturnType<typeof useGetAllAsientosAbonadosQuery>;
 export type GetAllAsientosAbonadosLazyQueryHookResult = ReturnType<typeof useGetAllAsientosAbonadosLazyQuery>;
 export type GetAllAsientosAbonadosQueryResult = Apollo.QueryResult<GetAllAsientosAbonadosQuery, GetAllAsientosAbonadosQueryVariables>;
+export const GetAllButacaEventoDocument = gql`
+    query GetAllButacaEvento($tendido: String, $eventoId: Int) {
+  GetAllButacaEvento(tendido: $tendido, eventoId: $eventoId) {
+    data {
+      butacaEventoId
+      eventoId
+      tendido
+      codigo
+      precio
+      cantidad
+    }
+    numeroTotal
+  }
+}
+    `;
+
+/**
+ * __useGetAllButacaEventoQuery__
+ *
+ * To run a query within a React component, call `useGetAllButacaEventoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllButacaEventoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllButacaEventoQuery({
+ *   variables: {
+ *      tendido: // value for 'tendido'
+ *      eventoId: // value for 'eventoId'
+ *   },
+ * });
+ */
+export function useGetAllButacaEventoQuery(baseOptions?: Apollo.QueryHookOptions<GetAllButacaEventoQuery, GetAllButacaEventoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllButacaEventoQuery, GetAllButacaEventoQueryVariables>(GetAllButacaEventoDocument, options);
+      }
+export function useGetAllButacaEventoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllButacaEventoQuery, GetAllButacaEventoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllButacaEventoQuery, GetAllButacaEventoQueryVariables>(GetAllButacaEventoDocument, options);
+        }
+export type GetAllButacaEventoQueryHookResult = ReturnType<typeof useGetAllButacaEventoQuery>;
+export type GetAllButacaEventoLazyQueryHookResult = ReturnType<typeof useGetAllButacaEventoLazyQuery>;
+export type GetAllButacaEventoQueryResult = Apollo.QueryResult<GetAllButacaEventoQuery, GetAllButacaEventoQueryVariables>;
 export const GetAllButacasDocument = gql`
     query GetAllButacas($tendido: String) {
   GetAllButacas(tendido: $tendido) {

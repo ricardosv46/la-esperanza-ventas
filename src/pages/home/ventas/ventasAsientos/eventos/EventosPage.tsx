@@ -22,6 +22,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsientosEventos } from '@services/useAsientosEventos'
 import Spinner from '@components/shared/Spinner/Spinner'
 import moment from 'moment'
+import { useButacasEvento } from '@services/useButacasEvento'
 const Abono = () => {
 	const [innerValue, setInnerValue] = useState<string>('T1')
 	const [seleccionados, setSeleccionados] = useState<IColums[]>([])
@@ -57,13 +58,13 @@ const Abono = () => {
 		label: tendido?.titulo!
 		// desc: tendido?.tendido!
 	}))
-	const { db: butacas, loading, refetch } = useButacas({ tendido: innerValue })
+	const { butacas, loading, refetch } = useButacasEvento({ tendido: innerValue, eventoId: evento?.eventoId })
 
 	const dataAsientos = useMemo(() => {
 		if (butacas?.length && !loading) {
 			return butacas.map((item, i) => ({
 				tendido: item?.tendido || '',
-				butacaId: item?.butacaId || '',
+				butacaId: String(item?.butacaEventoId) || '',
 				codigo: item?.codigo || '',
 				cantidad: item?.cantidad || 0,
 				precio: item?.precio || 0
