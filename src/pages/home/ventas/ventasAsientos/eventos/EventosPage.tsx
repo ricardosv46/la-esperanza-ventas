@@ -36,7 +36,7 @@ const Abono = () => {
     eventoId: evento?.eventoId,
     tendido: innerValue
   })
-  const { createVentaEvento, loadingVentaAbonado } = useVendedoras()
+  const { createVentaEvento, loadingVentaAbonado } = useVendedoras({})
 
   const dataComprobante = [
     { value: 'Boleta', label: 'Boleta' },

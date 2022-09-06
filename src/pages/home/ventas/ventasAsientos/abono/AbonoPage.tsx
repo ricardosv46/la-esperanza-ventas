@@ -32,7 +32,7 @@ const Abono = () => {
     feriaId: 1,
     tendido: innerValue
   })
-  const { createVentaAbonado, loadingVentaAbonado } = useVendedoras()
+  const { createVentaAbonado, loadingVentaAbonado } = useVendedoras({})
   const fecha = moment().format('YYYY-MM-DD')
   console.log(fecha)
   const dataComprobante = [
