@@ -55,7 +55,7 @@ const Input = (
           htmlFor={`input-${uid}`}
           className={classNames([
             isValueEmpty && props.type !== 'date'
-              ? 'top-[19px] left-3 text-primary-500'
+              ? 'top-[19px] left-3 text-primary-500 dark:text-second-500'
               : 'top-1 left-2 text-primary-500 dark:text-second-500 font-semibold ',
             hasError && props.type !== 'date'
               ? 'text-red-600 dark:text-red-400'

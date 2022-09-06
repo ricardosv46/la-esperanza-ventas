@@ -132,7 +132,7 @@ const VentasPage = () => {
       }>
       <form
         onSubmit={form.handleSubmit}
-        className="grid grid-cols-1 gap-3 py-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 ">
+        className="grid grid-cols-1 gap-3 py-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 ">
         <Select
           label="Tipo Venta"
           value={values.tipoVenta}
@@ -146,7 +146,7 @@ const VentasPage = () => {
           }}
         />
 
-        <Input
+        {/* <Input
           className="w-full"
           type="date"
           label="Fecha Inicial"
@@ -157,7 +157,7 @@ const VentasPage = () => {
           type="date"
           label="Fecha Final"
           {...form.getFieldProps('fechaFinal')}
-        />
+        /> */}
         <button className="w-full px-0 btn btn-solid-green" type="submit">
           Filtrar
         </button>
