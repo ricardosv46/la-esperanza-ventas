@@ -93,7 +93,7 @@ const Abono = () => {
         razonSocial:
           values.tipoComprobante === 'Factura'
             ? values.razonSocial
-            : values.nombres + '' + values.apellidos,
+            : values.nombres + ' ' + values.apellidos,
         tipoVenta: values.tipoVenta,
         celular: values.celular,
         email: values.email
