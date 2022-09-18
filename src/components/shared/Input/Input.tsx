@@ -17,7 +17,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   error?: any
   rightElement?: ReactElement
   icon?: (props: SVGProps<SVGSVGElement>) => ReactElement
-  touched?: boolean
+  touched?: any
   className?: string
 }
 

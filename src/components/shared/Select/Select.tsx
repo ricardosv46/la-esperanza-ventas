@@ -20,8 +20,8 @@ interface InnerData {
 interface Props<T> {
   options?: T[]
   label?: string
-  error?: string
-  touched?: boolean
+  error?: any
+  touched?: any
   withFilter?: boolean
   value?: string | number
   dataExtractor?: { value: keyof T; label: keyof T }
